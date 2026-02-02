@@ -31,6 +31,42 @@ def quicksort_copy(L):
 
 # *************************************
 
+# ************ Dual Pivot Quick Sort ************
+def dual_quicksort(L):
+    copy = dual_quicksort_copy(L)
+    for i in range(len(L)):
+        L[i] = copy[i]
+
+def dual_quicksort_copy(L):
+    if len(L) < 2:
+        return L
+    
+    pivot1 = L[0]
+    pivot2 = L[1]
+    
+    if pivot1 > pivot2:
+        pivot1, pivot2 = pivot2, pivot1
+        
+    left = []
+    mid = []
+    right = []
+    
+    # Elements strictly between L[0] & L[1] are processed
+    # Be careful: L[0] is pivot1 (or pivot2), L[1] is the other.
+    # We iterate from L[2:]
+    
+    for num in L[2:]:
+        if num < pivot1:
+            left.append(num)
+        elif num > pivot2:
+            right.append(num)
+        else:
+            mid.append(num)
+            
+    return dual_quicksort_copy(left) + [pivot1] + dual_quicksort_copy(mid) + [pivot2] + dual_quicksort_copy(right)
+
+# *************************************
+
 
 # ************ Merge Sort *************
 
@@ -67,6 +103,17 @@ def merge(left, right):
                 L.append(right[j])
                 j += 1
     return L
+
+def bottom_up_mergesort(L):
+    n = len(L)
+    window = 1
+    while window < n:
+        for i in range(0, n, window * 2):
+            left = L[i : i + window]
+            right = L[i + window : i + window * 2]
+            merged = merge(left, right)
+            L[i : i + len(merged)] = merged
+        window *= 2
 
 # *************************************
 
